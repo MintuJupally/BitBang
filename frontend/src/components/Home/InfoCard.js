@@ -1,0 +1,137 @@
+import {
+  Avatar,
+  Card,
+  CardContent,
+  Divider,
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+  Typography,
+} from "@mui/material";
+
+import btc from "../../assets/images/btc.svg";
+
+const InfoCard = () => {
+  return (
+    <Card
+      sx={{
+        maxWidth: 400,
+        marginTop: "20px",
+        boxShadow: "0px 0px 15px 5px rgb(200,200,200,0.7)",
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          padding: "20px 20px 10px 20px",
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <Avatar src={btc} alt="btc" />
+          <Typography variant="h6" style={{ paddingLeft: "10px" }}>
+            Bitcoin
+          </Typography>
+        </div>
+        <div>
+          <Typography>0.0000314 BTC</Typography>
+        </div>
+      </div>
+
+      <Divider />
+
+      <CardContent>
+        <Table>
+          <TableBody>
+            <TableRow>
+              <TableCell style={{ border: 0, padding: "10px 16px" }}>
+                <div>
+                  <Typography
+                    style={{ fontSize: "14px", color: "rgb(160,160,160)" }}
+                  >
+                    CURRENT
+                  </Typography>
+                </div>
+                <div>
+                  <Typography>₹3,180.18</Typography>
+                </div>
+              </TableCell>
+              <TableCell style={{ border: 0, padding: "10px 16px" }}>
+                <div>
+                  <Typography
+                    style={{ fontSize: "14px", color: "rgb(160,160,160)" }}
+                  >
+                    INVESTED
+                  </Typography>
+                </div>
+                <div>
+                  <Typography>₹5,000.08</Typography>
+                </div>
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell style={{ border: 0, padding: "10px 16px" }}>
+                <div>
+                  <Typography
+                    style={{ fontSize: "14px", color: "rgb(160,160,160)" }}
+                  >
+                    RETURNS
+                  </Typography>
+                </div>
+                <div>
+                  <Typography style={{ color: "rgb(233,0,0)" }}>
+                    -₹1,819.91
+                  </Typography>
+                </div>
+              </TableCell>
+              <TableCell style={{ border: 0, padding: "10px 16px" }}>
+                <div>
+                  <Typography
+                    style={{ fontSize: "14px", color: "rgb(160,160,160)" }}
+                  >
+                    RETURNS %
+                  </Typography>
+                </div>
+                <div>
+                  <Typography style={{ color: "rgb(233,0,0)" }}>
+                    -36.39%
+                  </Typography>
+                </div>
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell style={{ border: 0, padding: "10px 16px" }}>
+                <div>
+                  <Typography
+                    style={{ fontSize: "14px", color: "rgb(160,160,160)" }}
+                  >
+                    AVERAGE BUYING PRICE
+                  </Typography>
+                </div>
+                <div>
+                  <Typography>₹296.81</Typography>
+                </div>
+              </TableCell>
+              <TableCell style={{ border: 0, padding: "10px 16px" }}>
+                <div>
+                  <Typography
+                    style={{ fontSize: "14px", color: "rgb(160,160,160)" }}
+                  >
+                    CURRENT BUYING PRICE
+                  </Typography>
+                </div>
+                <div>
+                  <Typography>₹188.78</Typography>
+                </div>
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </CardContent>
+    </Card>
+  );
+};
+
+export default InfoCard;

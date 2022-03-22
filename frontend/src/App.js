@@ -1,7 +1,11 @@
+import { useRoutes } from "react-router-dom";
+import setRoutes from "./routes";
 import "./App.css";
 
 function App() {
-  return <div className="App"></div>;
+  const routing = useRoutes(setRoutes());
+
+  return <div className="App">{routing}</div>;
 }
 
 export default App;
