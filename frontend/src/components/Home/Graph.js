@@ -40,7 +40,7 @@ const Graph = ({ data, name }) => {
       },
     },
     chart: {
-      height: 490,
+      height: 480,
     },
     credits: {
       enabled: false,

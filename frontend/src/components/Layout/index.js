@@ -20,11 +20,9 @@ const Layout = () => {
           </div>
         </Container>
       </header>
-      <Container>
-        <div style={{ paddingTop: "70px" }}>
-          <Outlet />
-        </div>
-      </Container>
+      <div style={{ paddingTop: "70px" }}>
+        <Outlet />
+      </div>
     </div>
   );
 };

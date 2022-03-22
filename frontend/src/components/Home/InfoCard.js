@@ -10,14 +10,11 @@ import {
   Typography,
 } from "@mui/material";
 
-import btc from "../../assets/images/btc.svg";
-
-const InfoCard = () => {
+const InfoCard = ({ data }) => {
   return (
     <Card
       sx={{
         maxWidth: 400,
-        marginTop: "20px",
         boxShadow: "0px 0px 15px 5px rgb(200,200,200,0.7)",
       }}
     >
@@ -30,13 +27,13 @@ const InfoCard = () => {
         }}
       >
         <div style={{ display: "flex", alignItems: "center" }}>
-          <Avatar src={btc} alt="btc" />
+          <Avatar src={data.img} alt="btc" />
           <Typography variant="h6" style={{ paddingLeft: "10px" }}>
-            Bitcoin
+            {data.name}
           </Typography>
         </div>
         <div>
-          <Typography>0.0000314 BTC</Typography>
+          <Typography>0.0000314 {data.curr}</Typography>
         </div>
       </div>
 
