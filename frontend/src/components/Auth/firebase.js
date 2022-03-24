@@ -21,6 +21,7 @@ const signInWithGoogle = () => {
   signInWithPopup(auth, provider)
     .then((result) => {
       console.log(result);
+      console.log(result.additionalUserInfo.isNewUser); 
     })
     .catch((error) => {
       console.log(error);

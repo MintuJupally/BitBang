@@ -15,7 +15,7 @@ const Logout = ({ user }) => {
       component="span"
       sx={{
         position: "absolute",
-        right: { md: 50, xs: 0 },
+        right: { md: 50, xs: 16 },
       }}
     >
       <IconButton

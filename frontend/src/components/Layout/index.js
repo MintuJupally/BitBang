@@ -7,10 +7,7 @@ const Layout = ({ user, loading }) => {
 	const [anchorEl, setAnchorEl] = useState(null);
 	const open = Boolean(anchorEl);
 
-	const handleClose = () => {
-		setAnchorEl(null);
-	};
-	if (loading)
+	if (loading || !user)
 		return (
 			<div
 				style={{
