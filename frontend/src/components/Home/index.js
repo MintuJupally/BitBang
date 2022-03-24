@@ -1,7 +1,9 @@
 import clsx from "clsx";
 import { useState, useEffect } from "react";
+import { makeStyles } from "@mui/styles";
 import {
   Avatar,
+  Backdrop,
   Box,
   Button,
   Card,
@@ -11,11 +13,9 @@ import {
   Menu,
   MenuItem,
   Modal,
-  Popover,
   Tooltip,
   Typography,
 } from "@mui/material";
-import { makeStyles } from "@mui/styles";
 import { ArrowCircleDown, KeyboardArrowDownRounded } from "@mui/icons-material";
 
 import Graph from "./Graph";
@@ -64,8 +64,12 @@ const Home = () => {
 
   const handleModalClose = () => {
     console.log("clicked");
-    setModalOpen(false);
+    setModalOpen((el) => false);
   };
+
+  useEffect(() => {
+    console.log(modalOpen);
+  }, [modalOpen]);
 
   return (
     <div style={{ margin: "15px" }}>
@@ -288,10 +292,11 @@ const Home = () => {
           justifyContent: "center",
           height: "100px",
           alignItems: "center",
-          borderRadius: "30px",
           cursor: "pointer",
-          // borderTopLeftRadius: "30px",
-          // borderTopRightRadius: "30px",
+          // borderRadius: "30px",
+          borderTopLeftRadius: "30px",
+          borderTopRightRadius: "30px",
+          boxShadow: "0px 15px 15px 2px rgb(150,150,150,1)",
         }}
         onClick={() => {
           setModalOpen(true);
@@ -399,30 +404,29 @@ const Home = () => {
             </div>
           </div>
         </div>
-
-        <Modal
-          open={modalOpen}
-          onClose={handleModalClose}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
-          <Box
-            style={{
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-              width: 400,
-              // border: "2px solid #000",
-              boxShadow: 24,
-              p: 4,
-              outline: "none",
-            }}
-          >
-            <InfoCard data={coins[currentCoin]} />
-          </Box>
-        </Modal>
       </div>
+      <Modal
+        open={modalOpen}
+        onClose={handleModalClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: 400,
+            // border: "2px solid #000",
+            boxShadow: 24,
+            p: 4,
+            outline: "none",
+          }}
+        >
+          <InfoCard data={coins[currentCoin]} />
+        </Box>
+      </Modal>
     </div>
   );
 };
