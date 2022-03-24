@@ -1,14 +1,15 @@
+import React, { useState } from "react";
 import { Outlet } from "react-router-dom";
-import {
-	Button,
-	Container,
-	Typography,
-	Grid,
-	CircularProgress,
-} from "@mui/material";
-import { auth } from "../Auth/firebase";
+import { Container, Typography, CircularProgress } from "@mui/material";
+import Logout from "../Auth/Logout";
 
 const Layout = ({ user, loading }) => {
+	const [anchorEl, setAnchorEl] = useState(null);
+	const open = Boolean(anchorEl);
+
+	const handleClose = () => {
+		setAnchorEl(null);
+	};
 	if (loading)
 		return (
 			<div
@@ -38,8 +39,20 @@ const Layout = ({ user, loading }) => {
 			>
 				<Container>
 					<div>
-						<Typography variant="h4" component="span">BITBANG</Typography>
-						<Button variant="contained" sx={{position:{xs:"relative", md:"absolute"}, right:50}}>User</Button>
+						<Typography
+							variant="h4"
+							component="span"
+							sx={{
+								position: {
+									xs: `${user ? "absolute" : "inherit"}`,
+									md: "inherit",
+								},
+								left: { xs: 16 },
+							}}
+						>
+							BITBANG
+						</Typography>
+						{user && <Logout user={user} />}
 					</div>
 				</Container>
 			</header>
