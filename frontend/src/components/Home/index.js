@@ -67,6 +67,8 @@ const Home = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
 
+  const [transactions, setTransactions] = useState([]);
+
   const [currentCoin, setCurrentCoin] = useState([]);
 
   const handleModalClose = () => {
@@ -252,51 +254,67 @@ const Home = () => {
           >
             <Typography style={{ fontSize: "19px" }}>TRADE HISTORY</Typography>
             <Divider />
-            <div style={{ overflow: "auto" }} className="hist-card">
-              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13].map((el, index) => (
-                <>
-                  <div
-                    key={"hist-" + index}
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      width: "100%",
-                      margin: "8px 0px",
-                    }}
-                  >
-                    <div style={{ display: "flex", alignItems: "center" }}>
-                      <div>
-                        <ArrowCircleDown
-                          style={{
-                            color: "lightgreen",
-                            fontSize: "30px",
-                            marginRight: "5px",
-                          }}
-                        />
+            <div
+              style={{
+                overflow: "auto",
+                minHeight: "200px",
+                maxHeight: "300px",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+              className="hist-card"
+            >
+              {transactions.length > 0 &&
+                transactions.map((el, index) => (
+                  <>
+                    <div
+                      key={"hist-" + index}
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        width: "100%",
+                        margin: "8px 0px",
+                      }}
+                    >
+                      <div style={{ display: "flex", alignItems: "center" }}>
+                        <div>
+                          <ArrowCircleDown
+                            style={{
+                              color: "lightgreen",
+                              fontSize: "30px",
+                              marginRight: "5px",
+                            }}
+                          />
+                        </div>
+                        <div style={{ textAlign: "left" }}>
+                          Day 1<br />
+                          09:29 PM
+                        </div>
                       </div>
-                      <div style={{ textAlign: "left" }}>
-                        Day 1<br />
-                        09:29 PM
+                      <div style={{ display: "flex", alignItems: "center" }}>
+                        <Typography>16.845 MANA</Typography>
                       </div>
                     </div>
-                    <div style={{ display: "flex", alignItems: "center" }}>
-                      <Typography>16.845 MANA</Typography>
-                    </div>
-                  </div>
-                  <Divider
-                    style={{
-                      height: "0.4px",
-                      width: "calc(90% - 20px)",
-                      position: "relative",
-                      left: "10px",
-                      right: "10px",
-                      display: "block",
-                      margin: "auto",
-                      background: "rgb(0,0,255,0.1)",
-                    }}
-                  />
-                </>
-              ))}
+                    <Divider
+                      style={{
+                        height: "0.4px",
+                        width: "calc(90% - 20px)",
+                        position: "relative",
+                        left: "10px",
+                        right: "10px",
+                        display: "block",
+                        margin: "auto",
+                        background: "rgb(0,0,255,0.1)",
+                      }}
+                    />
+                  </>
+                ))}
+              {transactions.length === 0 && (
+                <div>
+                  <Typography>Nothing to show</Typography>
+                </div>
+              )}
             </div>
           </Card>
           <div style={{ display: "flex", justifyContent: "space-evenly" }}>

@@ -8,7 +8,13 @@ body {
 }
 
 * {
-  font-family: "Source Sans Pro", "Roboto", "Varela Round", sans-serif;
+  font-family: "Source Sans Pro", "Roboto", "Varela Round", sans-serif !important;
+}
+
+#main-title {
+  font-family: "Montserrat", "Source Sans Pro", "Roboto", "Varela Round",
+    sans-serif !important;
+  font-weight: 500;
 }
 
 code {
