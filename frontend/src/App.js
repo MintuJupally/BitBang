@@ -1,7 +1,7 @@
 import { useRoutes } from "react-router-dom";
 import setRoutes from "./routes";
 import { auth } from "./components/Auth/firebase";
-import {useAuthState} from 'react-firebase-hooks/auth';
+import { useAuthState } from "react-firebase-hooks/auth";
 import "./App.css";
 
 function App() {

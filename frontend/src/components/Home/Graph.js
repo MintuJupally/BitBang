@@ -84,7 +84,7 @@ const Graph = ({ data, name }) => {
     series: [
       {
         name: "Price",
-        data: priceData,
+        data: data,
         tooltip: {
           valueDecimals: 2,
         },

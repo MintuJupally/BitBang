@@ -1,5 +1,9 @@
 import clsx from "clsx";
 import { useState, useEffect } from "react";
+
+import { collection, onSnapshot } from "firebase/firestore";
+import { db } from "../Auth/firebase";
+
 import { makeStyles } from "@mui/styles";
 import {
   Avatar,
@@ -57,10 +61,13 @@ const coins = [
 const Home = () => {
   const classes = useStyles();
 
-  const [currentCoin, setCurrentCoin] = useState(0);
+  const [prices, setPrices] = useState([]);
+  const [coinIndex, setCoinIndex] = useState(0);
   const [open, setOpen] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
+
+  const [currentCoin, setCurrentCoin] = useState([]);
 
   const handleModalClose = () => {
     console.log("clicked");
@@ -70,6 +77,34 @@ const Home = () => {
   useEffect(() => {
     console.log(modalOpen);
   }, [modalOpen]);
+
+  useEffect(() => {
+    const ref = collection(db, "values");
+    onSnapshot(ref, (data) => {
+      console.log("triggered");
+
+      const vals = data.docs
+        .map((el) => el.data())
+        .sort((a, b) => {
+          return a.time - b.time;
+        })
+        .map((el) => el.val);
+
+      setPrices(vals);
+    });
+  }, []);
+
+  useEffect(() => {
+    setCurrentCoin({
+      ...currentCoin,
+      ...coins[coinIndex],
+      prices: prices.map((el) => el[coinIndex]),
+    });
+  }, [prices, coinIndex]);
+
+  useEffect(() => {
+    console.log({ currentCoin });
+  }, [currentCoin]);
 
   return (
     <div style={{ margin: "15px" }}>
@@ -82,10 +117,10 @@ const Home = () => {
                 className={classes.card}
                 style={{
                   backgroundColor:
-                    index === currentCoin ? "rgb(230,230,230)" : "white",
+                    index === coinIndex ? "rgb(230,230,230)" : "white",
                 }}
                 onClick={() => {
-                  setCurrentCoin(index);
+                  setCoinIndex(index);
                 }}
               >
                 <div>
@@ -117,7 +152,7 @@ const Home = () => {
             >
               <div style={{ display: "flex", alignItems: "center" }}>
                 <div>
-                  <Avatar src={coins[currentCoin].img} />
+                  <Avatar src={currentCoin.img} />
                 </div>
                 <div>
                   <Typography
@@ -127,7 +162,7 @@ const Home = () => {
                       fontWeight: 500,
                     }}
                   >
-                    {coins[currentCoin].name}
+                    {currentCoin.name}
                   </Typography>
                 </div>
               </div>
@@ -156,7 +191,7 @@ const Home = () => {
                 <MenuItem
                   key={"coin-" + (index + 1)}
                   onClick={() => {
-                    setCurrentCoin(index);
+                    setCoinIndex(index);
                     setOpen(false);
                   }}
                 >
@@ -164,7 +199,7 @@ const Home = () => {
                     className={classes.card}
                     style={{
                       backgroundColor:
-                        index === currentCoin
+                        index === coinIndex
                           ? "rgb(230,230,230)"
                           : "transparent",
                       width: `${
@@ -202,7 +237,7 @@ const Home = () => {
               marginTop: "10px",
             }}
           >
-            <Graph name={coins[currentCoin].name} />
+            <Graph name={currentCoin.name} data={currentCoin.prices} />
           </Card>
         </Grid>
         <Grid item xs={12} md={3}>
@@ -269,13 +304,13 @@ const Home = () => {
               variant="contained"
               style={{ backgroundColor: "rgb(31, 147, 88)", width: "120px" }}
             >
-              BUY {coins[currentCoin].curr}
+              BUY {currentCoin.curr}
             </Button>
             <Button
               variant="contained"
               style={{ backgroundColor: "rgb(224, 77, 91)", width: "120px" }}
             >
-              SELL {coins[currentCoin].curr}
+              SELL {currentCoin.curr}
             </Button>
           </div>
         </Grid>
@@ -354,10 +389,10 @@ const Home = () => {
         </div>
         <div style={{ display: "flex", flexDirection: "column" }}>
           <Avatar
-            src={coins[currentCoin].img}
+            src={currentCoin.img}
             style={{ height: "60px", width: "60px", margin: "0px 20px" }}
           />
-          <Typography>{coins[currentCoin].curr}</Typography>
+          <Typography>{currentCoin.curr}</Typography>
         </div>
         <div style={{ display: "flex", flexWrap: "wrap" }}>
           <div style={{ width: "100px", marginLeft: "40px" }}>
@@ -399,7 +434,7 @@ const Home = () => {
             </div>
             <div>
               <Typography style={{ fontSize: "24px", textAlign: "center" }}>
-                ₹188.78
+                ₹{currentCoin?.prices?.[currentCoin?.prices?.length - 1]}
               </Typography>
             </div>
           </div>
@@ -424,7 +459,7 @@ const Home = () => {
             outline: "none",
           }}
         >
-          <InfoCard data={coins[currentCoin]} />
+          <InfoCard data={currentCoin} />
         </Box>
       </Modal>
     </div>
