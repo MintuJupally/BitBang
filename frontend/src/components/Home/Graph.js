@@ -1,36 +1,88 @@
-import React, { Component } from "react";
+import { useEffect, useRef } from "react";
 import ReactHighcharts from "react-highcharts/ReactHighstock.src";
-import priceData from "../../assets/btcdata.json";
-import moment from "moment";
+import { showPrice } from "../../utils";
+
+const pad = (arr) => {
+  let fin = [];
+  if (arr) fin = [...arr];
+
+  while (fin.length < 90) fin.push([fin.length, null]);
+
+  return fin;
+};
+
+const minimum = (arr) => {
+  if (!arr || arr.length === 0) return null;
+
+  let min = arr[0][1];
+  arr.forEach((el) => {
+    if (el[1] < min) min = el[1];
+  });
+
+  return min;
+};
+
+const maximum = (arr) => {
+  if (!arr || arr.length === 0) return null;
+
+  let max = 0;
+  arr.forEach((el) => {
+    if (el[1] > max) max = el[1];
+  });
+
+  return max;
+};
 
 const Graph = ({ data, name }) => {
+  const chart = useRef(null);
+
   const options = { style: "currency", currency: "INR" };
   const numberFormat = new Intl.NumberFormat("en-US", options);
   const configPrice = {
-    yAxis: [
-      {
-        offset: 20,
-        labels: {
-          formatter: function () {
-            return numberFormat.format(this.value);
-          },
-          x: -15,
-          style: {
-            color: "#000",
-            position: "absolute",
-          },
-          align: "left",
+    yAxis: {
+      offset: 20,
+      labels: {
+        formatter: function () {
+          return numberFormat.format(this.value);
+        },
+        x: -15,
+        style: {
+          color: "#000",
+          position: "absolute",
+        },
+        align: "left",
+      },
+      min: minimum(data),
+      max: maximum(data),
+      startOnTick: false,
+      endOnTick: false,
+    },
+    xAxis: {
+      offset: 20,
+      labels: {
+        formatter: function () {
+          const day = parseInt(this.value / 10);
+          const time = this.value % 10;
+
+          if (time === 0) return `Day ${day}`;
+
+          return `D${day} H${time}`;
         },
       },
-    ],
+      left: 0,
+      startOnTick: false,
+      endOnTick: false,
+    },
     tooltip: {
       shared: true,
       formatter: function () {
-        return (
-          numberFormat.format(this.y, 0) +
-          "</b><br/>" +
-          moment(this.x).format("MMMM Do YYYY, h:mm")
-        );
+        const day = parseInt(this.x / 10);
+        const time = this.x % 10;
+
+        if (time === 0)
+          return `<b>${showPrice(this.y, 2)}</b> <br/> Day ${day}`;
+
+        return `<b>${showPrice(this.y, 2)}</b><br/> Day ${day} Hour ${time}`;
       },
     },
     plotOptions: {
@@ -48,30 +100,27 @@ const Graph = ({ data, name }) => {
     legend: {
       enabled: true,
     },
-    xAxis: {
-      type: "date",
-    },
     rangeSelector: {
       buttons: [
         {
-          type: "hour",
-          count: 1,
-          text: "1h",
-        },
-        {
-          type: "hour",
+          type: "millisecond",
           count: 5,
           text: "5h",
         },
         {
-          type: "hour",
-          count: 12,
-          text: "12h",
+          type: "millisecond",
+          count: 10,
+          text: "1d",
         },
         {
-          type: "day",
-          count: 1,
-          text: "1d",
+          type: "millisecond",
+          count: 20,
+          text: "2d",
+        },
+        {
+          type: "millisecond",
+          count: 40,
+          text: "4d",
         },
         {
           type: "all",
@@ -84,7 +133,7 @@ const Graph = ({ data, name }) => {
     series: [
       {
         name: "Price",
-        data: data,
+        data: pad(data),
         tooltip: {
           valueDecimals: 2,
         },
@@ -92,9 +141,17 @@ const Graph = ({ data, name }) => {
     ],
   };
 
+  // const updateMinMax = () => {
+  //   chart.current.chart.update({ yAxis: { min: minimum(), max: maximum() } });
+  // };
+
+  // useEffect(() => {
+  //   updateMinMax();
+  // }, [data]);
+
   return (
-    <div>
-      <ReactHighcharts config={configPrice}></ReactHighcharts>
+    <div style={{ margin: "0px 10px" }}>
+      <ReactHighcharts config={configPrice} ref={chart}></ReactHighcharts>
     </div>
   );
 };

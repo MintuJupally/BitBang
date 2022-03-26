@@ -1,8 +1,21 @@
 import React, { useState } from "react";
-import { Box, Menu, MenuItem, IconButton, Avatar } from "@mui/material";
-import { auth } from "../Auth/firebase";
+import {
+  Box,
+  Menu,
+  MenuItem,
+  IconButton,
+  Avatar,
+  Typography,
+  ListItemIcon,
+  ListItemText,
+  Tooltip,
+} from "@mui/material";
+import { Logout } from "@mui/icons-material";
 
-const Logout = ({ user }) => {
+import { auth } from "../Auth/firebase";
+import showPrice from "../../utils/showPrice";
+
+const NavMenu = ({ user }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
@@ -15,9 +28,30 @@ const Logout = ({ user }) => {
       component="span"
       sx={{
         position: "absolute",
-        right: { md: 50, xs: 16 },
+        right: { md: 50, xs: 20 },
+        top: 10,
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
       }}
     >
+      {user.isRegistered ? (
+        <Typography style={{ paddingRight: "10px", fontSize: "18px" }}>
+          {showPrice(user.wallet)}
+        </Typography>
+      ) : (
+        <Tooltip title="Not Registered" arrow>
+          <Typography
+            style={{
+              marginRight: "10px",
+              fontSize: "18px",
+              cursor: "default",
+            }}
+          >
+            NR
+          </Typography>
+        </Tooltip>
+      )}
       <IconButton
         id="menu-button"
         aria-controls={open ? "menu" : undefined}
@@ -46,11 +80,14 @@ const Logout = ({ user }) => {
             auth.signOut();
           }}
         >
-          Logout
+          <ListItemIcon>
+            <Logout fontSize="small" />
+          </ListItemIcon>
+          <ListItemText>Logout</ListItemText>
         </MenuItem>
       </Menu>
     </Box>
   );
 };
 
-export default Logout;
+export default NavMenu;

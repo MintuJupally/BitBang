@@ -42,22 +42,22 @@
   padding-right: 10px;
 }
 /* width */
-.hist-card::-webkit-scrollbar {
+*::-webkit-scrollbar {
   width: 6px;
 }
 
 /* Track */
-.hist-card::-webkit-scrollbar-track {
+*::-webkit-scrollbar-track {
   background: transparent;
 }
 
 /* Handle */
-.hist-card::-webkit-scrollbar-thumb {
+*::-webkit-scrollbar-thumb {
   background: #888;
   border-radius: 5px;
 }
 
 /* Handle on hover */
-.hist-card::-webkit-scrollbar-thumb:hover {
+*::-webkit-scrollbar-thumb:hover {
   background: #555;
 }

@@ -10,6 +10,8 @@ import {
   Typography,
 } from "@mui/material";
 
+import { showPrice } from "../../utils";
+
 const InfoCard = ({ data }) => {
   return (
     <Card
@@ -33,7 +35,9 @@ const InfoCard = ({ data }) => {
           </Typography>
         </div>
         <div>
-          <Typography>0.0000314 {data.curr}</Typography>
+          <Typography>
+            {data.owned} {data.curr}
+          </Typography>
         </div>
       </div>
 
@@ -52,7 +56,9 @@ const InfoCard = ({ data }) => {
                   </Typography>
                 </div>
                 <div>
-                  <Typography>₹3,180.18</Typography>
+                  <Typography>
+                    {showPrice(data.current * data.owned)}
+                  </Typography>
                 </div>
               </TableCell>
               <TableCell style={{ border: 0, padding: "10px 16px" }}>
@@ -64,7 +70,7 @@ const InfoCard = ({ data }) => {
                   </Typography>
                 </div>
                 <div>
-                  <Typography>₹5,000.08</Typography>
+                  <Typography>{showPrice(data.invested)}</Typography>
                 </div>
               </TableCell>
             </TableRow>
@@ -120,7 +126,7 @@ const InfoCard = ({ data }) => {
                   </Typography>
                 </div>
                 <div>
-                  <Typography>₹188.78</Typography>
+                  <Typography>{showPrice(data.current)}</Typography>
                 </div>
               </TableCell>
             </TableRow>
