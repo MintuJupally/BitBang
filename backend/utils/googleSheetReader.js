@@ -45,8 +45,12 @@ const getAllEmails = async () => {
   return emails;
 };
 
+const registeredEmails = () => {
+  return emails;
+};
+
 module.exports = {
   initializeGoogleSheetsClient,
   getAllEmails,
-  registeredEmails: emails,
+  registeredEmails,
 };

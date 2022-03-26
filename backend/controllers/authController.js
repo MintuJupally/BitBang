@@ -7,7 +7,6 @@ const catchAsync = require("../utils/catchAsync");
 const { registeredEmails } = require("../utils/googleSheetReader");
 
 exports.verifyToken = catchAsync(async (req, res, next) => {
-  console.log(req.body);
   const { token } = req.body;
 
   if (!token) return next(new AppError("User not logged in.", 403));
@@ -42,7 +41,7 @@ exports.login = catchAsync(async (req, res, next) => {
     };
 
     if (
-      registeredEmails
+      registeredEmails()
         .map((email) => email.toLowerCase())
         .includes(req.user.email)
     ) {
