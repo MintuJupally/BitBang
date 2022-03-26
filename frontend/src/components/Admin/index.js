@@ -157,11 +157,11 @@ const Admin = ({ user }) => {
 
       <div style={{ margin: "20px 0px" }}>
         <Button
-          disabled={loading || (status?.started && !status?.paused)}
+          disabled={loading || (status?.started && !status?.pause)}
           variant="contained"
           style={{
             backgroundColor:
-              loading || (status?.started && !status?.paused)
+              loading || (status?.started && !status?.pause)
                 ? "lightgrey"
                 : "rgb(31, 147, 88)",
             margin: "0px 10px",
