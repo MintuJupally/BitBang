@@ -36,10 +36,12 @@ const startUpload = () => {
 
   timer = setInterval(() => {
     if (index === data.length) {
-      clearInterval(timer);
       db.collection("event")
         .doc("start")
         .update({ stop: true, startedAt: Date.now(), lastUpdated: Date.now() });
+
+      clearInterval(timer);
+      return;
     }
     console.log(data[index]);
     db.collection("values").add({ time: index, val: data[index++] });

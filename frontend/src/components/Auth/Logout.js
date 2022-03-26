@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Box,
+  Divider,
   Menu,
   MenuItem,
   IconButton,
@@ -10,12 +12,19 @@ import {
   ListItemText,
   Tooltip,
 } from "@mui/material";
-import { Logout } from "@mui/icons-material";
+import {
+  AdminPanelSettingsOutlined,
+  HomeOutlined,
+  Logout,
+  PriceChange,
+} from "@mui/icons-material";
 
 import { auth } from "../Auth/firebase";
 import showPrice from "../../utils/showPrice";
 
 const NavMenu = ({ user }) => {
+  const navigate = useNavigate();
+
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
@@ -75,6 +84,44 @@ const NavMenu = ({ user }) => {
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
         transformOrigin={{ vertical: "top", horizontal: "right" }}
       >
+        <MenuItem
+          onClick={() => {
+            navigate("/home");
+            handleClose();
+          }}
+        >
+          <ListItemIcon>
+            <HomeOutlined fontSize="small" />
+          </ListItemIcon>
+          <ListItemText>Home</ListItemText>
+        </MenuItem>
+        {user.isRegistered && (
+          <MenuItem
+            onClick={() => {
+              navigate("/portfolio");
+              handleClose();
+            }}
+          >
+            <ListItemIcon>
+              <PriceChange fontSize="small" />
+            </ListItemIcon>
+            <ListItemText>Portfolio</ListItemText>
+          </MenuItem>
+        )}
+        {user.admin && (
+          <MenuItem
+            onClick={() => {
+              navigate("/admin");
+              handleClose();
+            }}
+          >
+            <ListItemIcon>
+              <AdminPanelSettingsOutlined fontSize="small" />
+            </ListItemIcon>
+            <ListItemText>Admin</ListItemText>
+          </MenuItem>
+        )}
+        <Divider />
         <MenuItem
           onClick={() => {
             auth.signOut();
