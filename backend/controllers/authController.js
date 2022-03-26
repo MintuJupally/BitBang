@@ -32,6 +32,16 @@ exports.protect = catchAsync(async (req, res, next) => {
   next();
 });
 
+exports.restrictToAdmin = catchAsync(async (req, res, next) => {
+  if (!req.user.admin) {
+    return next(
+      new AppError("You do not have permission to perform this action", 403)
+    );
+  }
+
+  next();
+});
+
 exports.login = catchAsync(async (req, res, next) => {
   let user = await db.collection("users").doc(req.user.id).get();
 

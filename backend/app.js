@@ -8,7 +8,6 @@ const adminRouter = require("./routes/adminRoutes");
 const authRouter = require("./routes/authRoutes");
 const tradeRouter = require("./routes/tradeRoutes");
 const globalErrorHandler = require("./controllers/errorController");
-const data = require("./assets/data.json");
 const { db } = require("./db");
 
 const app = express();
