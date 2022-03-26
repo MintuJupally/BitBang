@@ -3,12 +3,14 @@ const showPrice = (price, roundTo = 2) => {
     Math.round((price + Number.EPSILON) * Math.pow(10, roundTo)) /
     Math.pow(10, roundTo);
 
-  return num.toLocaleString("en-IN", {
+  const res = num.toLocaleString("en-IN", {
     minimumFractionDigits: 0,
     maximumFractionDigits: roundTo,
     style: "currency",
     currency: "INR",
   });
+
+  return res;
 };
 
 export default showPrice;

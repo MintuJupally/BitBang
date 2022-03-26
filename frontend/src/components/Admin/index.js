@@ -113,7 +113,7 @@ const Admin = ({ user }) => {
   }, [transactions, prices]);
 
   const perform = (type) => {
-    if (["start", "stop", "refresh"].includes(type)) {
+    if (["start", "pause", "stop", "refresh"].includes(type)) {
       setLoading(true);
 
       axios
@@ -191,7 +191,7 @@ const Admin = ({ user }) => {
               loading || (status?.started && !status?.pause)
                 ? "lightgrey"
                 : "rgb(31, 147, 88)",
-            margin: "0px 10px",
+            margin: "10px",
           }}
           onClick={() => {
             perform("start");
@@ -207,7 +207,7 @@ const Admin = ({ user }) => {
               loading || status?.stop || status?.pause
                 ? "lightgrey"
                 : "goldenrod",
-            margin: "0px 10px",
+            margin: "10px",
           }}
           onClick={() => {
             perform("pause");
@@ -220,7 +220,7 @@ const Admin = ({ user }) => {
           variant="contained"
           style={{
             backgroundColor: loading ? "lightgrey" : "rgb(230, 0, 0)",
-            margin: "0px 10px",
+            margin: "10px",
           }}
           onClick={() => {
             perform("stop");
@@ -231,7 +231,7 @@ const Admin = ({ user }) => {
         <Button
           disabled={loading}
           variant="contained"
-          style={{ margin: "0px 10px" }}
+          style={{ margin: "10px" }}
           onClick={() => {
             perform("refresh");
           }}

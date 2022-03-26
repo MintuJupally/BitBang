@@ -7,7 +7,6 @@ import { db } from "../Auth/firebase";
 import { makeStyles } from "@mui/styles";
 import {
   Avatar,
-  Backdrop,
   Box,
   Button,
   Card,
@@ -159,7 +158,8 @@ const Home = ({ user }) => {
     });
 
     if (tradeModalOpen) {
-      const current = currentCoin?.prices?.[currentCoin?.prices?.length - 1];
+      const current =
+        currentCoin?.prices?.[currentCoin?.prices?.length - 1]?.[1];
 
       if (money !== "" && parseFloat(money) !== 0)
         setNumCoins((parseFloat(money) / current).toString());
@@ -366,8 +366,8 @@ const Home = ({ user }) => {
               }}
               className="hist-card"
             >
-              {transactions.length > 0 &&
-                transactions.map((el, index) => (
+              {transactions?.length > 0 &&
+                transactions?.map((el, index) => (
                   <Fragment key={"hist-" + index}>
                     <div
                       key={"hist-" + index}

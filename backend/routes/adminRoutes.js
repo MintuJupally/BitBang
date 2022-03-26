@@ -27,7 +27,7 @@ const startUpload = () => {
     });
 
   timer = setInterval(() => {
-    if (index === data.length) {
+    if (index === data.length || !status) {
       db.collection("event")
         .doc("start")
         .update({ stop: true, startedAt: Date.now(), lastUpdated: Date.now() });
@@ -38,7 +38,16 @@ const startUpload = () => {
     console.log({ time: index, val: data[index] });
 
     db.collection("values").add({ time: index, val: data[index++] });
-  }, 1.5 * 60 * 1000);
+    if (index % 10 === 0 && index < data.length) {
+      clearInterval(timer);
+      setTimeout(() => {
+        db.collection("event")
+          .doc("start")
+          .update({ pause: true, lastUpdated: Date.now() });
+      }, 1.5 * 60 * 1000);
+      status = false;
+    }
+  }, 5 * 1000);
 };
 
 Router.use(
@@ -53,7 +62,7 @@ Router.post(
     if (status) return res.send("Already started");
 
     status = true;
-    startUpload();
+    if (data.length < index) startUpload();
 
     res.send("Started");
   })
