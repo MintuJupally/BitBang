@@ -104,6 +104,7 @@ const Home = ({ user }) => {
         coins: parseFloat(numCoins),
         curr: currentCoin?.curr,
         type: tradeModalOpen,
+        t: currentCoin?.prices?.[currentCoin?.prices?.length - 1]?.[0],
         token: user.token,
       })
       .then((res) => {
@@ -377,7 +378,8 @@ const Home = ({ user }) => {
                           )}
                         </div>
                         <div style={{ textAlign: "left" }}>
-                          Day 1<br />
+                          Day ${parseInt(el.time / 10)}
+                          <br />
                           09:29 PM
                         </div>
                       </div>
@@ -440,7 +442,7 @@ const Home = ({ user }) => {
           )}
         </Grid>
       </Grid>
-      <div
+      <Box
         style={{
           display: "flex",
           position: "fixed",
@@ -450,7 +452,6 @@ const Home = ({ user }) => {
           margin: "0 10vw",
           left: 0,
           justifyContent: "center",
-          height: "100px",
           alignItems: "center",
           cursor: user.isRegistered ? "pointer" : "default",
           // borderRadius: "30px",
@@ -458,70 +459,84 @@ const Home = ({ user }) => {
           borderTopRightRadius: "30px",
           boxShadow: "0px 15px 15px 2px rgb(150,150,150,1)",
         }}
+        sx={{ height: { xs: "80px", md: "100px" } }}
         onClick={() => {
           if (user.isRegistered) setModalOpen(true);
         }}
       >
         {user.isRegistered && (
-          <div style={{ display: "flex", flexWrap: "wrap" }}>
-            <div style={{ width: "100px", marginRight: "40px" }}>
-              <div>
-                <Typography
-                  style={{
-                    fontSize: "13px",
-                    color: "rgb(120,120,120)",
-                    padding: 0,
-                    margin: 0,
-                    textAlign: "center",
-                  }}
-                >
-                  CURRENT
-                </Typography>
+          <Hidden mdDown>
+            <div style={{ display: "flex", flexWrap: "wrap" }}>
+              <div style={{ width: "100px", marginRight: "40px" }}>
+                <div>
+                  <Typography
+                    style={{
+                      fontSize: "13px",
+                      color: "rgb(120,120,120)",
+                      padding: 0,
+                      margin: 0,
+                      textAlign: "center",
+                    }}
+                  >
+                    CURRENT
+                  </Typography>
+                </div>
+                <div>
+                  <Typography style={{ fontSize: "24px", textAlign: "center" }}>
+                    {showPrice(owned * current)}
+                  </Typography>
+                </div>
               </div>
-              <div>
-                <Typography style={{ fontSize: "24px", textAlign: "center" }}>
-                  {showPrice(owned * current)}
-                </Typography>
+              <div style={{ width: "100px", marginRight: "40px" }}>
+                <div>
+                  <Typography
+                    style={{
+                      fontSize: "13px",
+                      color: "rgb(120,120,120)",
+                      padding: 0,
+                      margin: 0,
+                      textAlign: "center",
+                    }}
+                  >
+                    INVESTED
+                  </Typography>
+                </div>
+                <div>
+                  <Typography
+                    style={{
+                      fontSize: "24px",
+                      textAlign: "center",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {showPrice(invested)}
+                  </Typography>
+                </div>
               </div>
             </div>
-            <div style={{ width: "100px", marginRight: "40px" }}>
-              <div>
-                <Typography
-                  style={{
-                    fontSize: "13px",
-                    color: "rgb(120,120,120)",
-                    padding: 0,
-                    margin: 0,
-                    textAlign: "center",
-                  }}
-                >
-                  INVESTED
-                </Typography>
-              </div>
-              <div>
-                <Typography
-                  style={{
-                    fontSize: "24px",
-                    textAlign: "center",
-                    whiteSpace: "nowrap",
-                  }}
-                >
-                  {showPrice(invested)}
-                </Typography>
-              </div>
-            </div>
-          </div>
+          </Hidden>
         )}
-        {user.isRegistered && (
+        {user.isRegistered ? (
           <div style={{ display: "flex", flexDirection: "column" }}>
             <Avatar
               src={currentCoin?.img}
               style={{ height: "60px", width: "60px", margin: "0px 20px" }}
             />
-            <Typography>{currentCoin?.curr}</Typography>
+            <Hidden mdDown>
+              <Typography>{currentCoin?.curr}</Typography>
+            </Hidden>
+          </div>
+        ) : (
+          <div>
+            <Typography
+              variant="h5"
+              style={{ color: "rgb(230,0,0)", marginRight: "40px" }}
+            >
+              NOT REGISTERED
+            </Typography>
           </div>
         )}
-        {user.isRegistered ? (
+        {user.isRegistered && (
           <div style={{ display: "flex", flexWrap: "wrap" }}>
             <div style={{ width: "100px", marginLeft: "40px" }}>
               <div>
@@ -544,41 +559,34 @@ const Home = ({ user }) => {
               </div>
             </div>
 
-            <div style={{ width: "100px", marginLeft: "40px" }}>
-              <div>
-                <Tooltip title="Current Buying Price" placement="top" arrow>
-                  <Typography
-                    style={{
-                      fontSize: "13px",
-                      color: "rgb(120,120,120)",
-                      padding: 0,
-                      margin: 0,
-                      textAlign: "center",
-                      cursor: "default",
-                    }}
-                  >
-                    CBP
+            <Hidden mdDown>
+              <div style={{ width: "100px", marginLeft: "40px" }}>
+                <div>
+                  <Tooltip title="Current Buying Price" placement="top" arrow>
+                    <Typography
+                      style={{
+                        fontSize: "13px",
+                        color: "rgb(120,120,120)",
+                        padding: 0,
+                        margin: 0,
+                        textAlign: "center",
+                        cursor: "default",
+                      }}
+                    >
+                      CBP
+                    </Typography>
+                  </Tooltip>
+                </div>
+                <div>
+                  <Typography style={{ fontSize: "24px", textAlign: "center" }}>
+                    {showPrice(current)}
                   </Typography>
-                </Tooltip>
+                </div>
               </div>
-              <div>
-                <Typography style={{ fontSize: "24px", textAlign: "center" }}>
-                  {showPrice(current)}
-                </Typography>
-              </div>
-            </div>
-          </div>
-        ) : (
-          <div>
-            <Typography
-              variant="h5"
-              style={{ color: "rgb(230,0,0)", marginRight: "40px" }}
-            >
-              NOT REGISTERED
-            </Typography>
+            </Hidden>
           </div>
         )}
-      </div>
+      </Box>
       <Modal
         open={modalOpen}
         onClose={handleModalClose}

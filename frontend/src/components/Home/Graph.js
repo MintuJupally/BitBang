@@ -33,6 +33,12 @@ const maximum = (arr) => {
   return max;
 };
 
+const latestDay = (arr) => {
+  if (!arr || arr.length === 0) return null;
+
+  return parseInt(arr[arr.length - 1][0] / 10);
+};
+
 const Graph = ({ data, name }) => {
   const chart = useRef(null);
 
@@ -69,9 +75,10 @@ const Graph = ({ data, name }) => {
           return `D${day} H${time}`;
         },
       },
-      left: 0,
       startOnTick: false,
       endOnTick: false,
+      min: latestDay(data) * 10,
+      max: latestDay(data) * 10 + 10,
     },
     tooltip: {
       shared: true,
@@ -127,7 +134,7 @@ const Graph = ({ data, name }) => {
           text: "All",
         },
       ],
-      selected: 4,
+      selected: 1,
       inputEnabled: false,
     },
     series: [
@@ -141,16 +148,17 @@ const Graph = ({ data, name }) => {
     ],
   };
 
-  // const updateMinMax = () => {
-  //   chart.current.chart.update({ yAxis: { min: minimum(), max: maximum() } });
-  // };
-
   // useEffect(() => {
-  //   updateMinMax();
+  //   updateFocus();
   // }, [data]);
 
   return (
-    <div style={{ margin: "0px 10px" }}>
+    <div
+      style={{ margin: "0px 10px" }}
+      onClick={() => {
+        console.log(chart.current);
+      }}
+    >
       <ReactHighcharts config={configPrice} ref={chart}></ReactHighcharts>
     </div>
   );

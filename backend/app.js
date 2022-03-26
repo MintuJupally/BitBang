@@ -25,8 +25,22 @@ let timer = null;
 const startUpload = () => {
   console.log(data[index]);
   db.collection("values").add({ time: index, val: data[index++] });
+  if (index <= 1)
+    db.collection("event").doc("start").set({
+      started: true,
+      stop: false,
+      pause: false,
+      startedAt: Date.now(),
+      lastUpdated: Date.now(),
+    });
 
   timer = setInterval(() => {
+    if (index === data.length) {
+      clearInterval(timer);
+      db.collection("event")
+        .doc("start")
+        .update({ stop: true, startedAt: Date.now(), lastUpdated: Date.now() });
+    }
     console.log(data[index]);
     db.collection("values").add({ time: index, val: data[index++] });
   }, 1.5 * 60 * 1000);
@@ -51,6 +65,11 @@ app.post("/api/stop", async (req, res, next) => {
     if (timer) {
       clearInterval(timer);
       timer = null;
+      index = 0;
+
+      db.collection("event")
+        .doc("start")
+        .update({ stop: true, lastUpdated: Date.now() });
     } else {
       res.send("Already Stopped");
     }

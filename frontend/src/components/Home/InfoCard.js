@@ -10,7 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 
-import { showPrice } from "../../utils";
+import { showPrice, roundTo } from "../../utils";
 
 const InfoCard = ({ data }) => {
   return (
@@ -36,7 +36,7 @@ const InfoCard = ({ data }) => {
         </div>
         <div>
           <Typography>
-            {data.owned} {data.curr}
+            {roundTo(data.owned, 8)} {data.curr}
           </Typography>
         </div>
       </div>
@@ -70,7 +70,11 @@ const InfoCard = ({ data }) => {
                   </Typography>
                 </div>
                 <div>
-                  <Typography>{showPrice(data.invested)}</Typography>
+                  <Typography>
+                    {data.invested >= 0
+                      ? showPrice(data.invested)
+                      : showPrice(0)}
+                  </Typography>
                 </div>
               </TableCell>
             </TableRow>
@@ -84,8 +88,15 @@ const InfoCard = ({ data }) => {
                   </Typography>
                 </div>
                 <div>
-                  <Typography style={{ color: "rgb(233,0,0)" }}>
-                    -₹1,819.91
+                  <Typography
+                    style={{
+                      color:
+                        data.owned * data.current - data.invested >= 0
+                          ? "lightgreen"
+                          : "rgb(233,0,0)",
+                    }}
+                  >
+                    {showPrice(data.owned * data.current - data.invested)}
                   </Typography>
                 </div>
               </TableCell>
@@ -98,26 +109,36 @@ const InfoCard = ({ data }) => {
                   </Typography>
                 </div>
                 <div>
-                  <Typography style={{ color: "rgb(233,0,0)" }}>
-                    -36.39%
+                  <Typography
+                    style={{
+                      color:
+                        data.invested > 0 &&
+                        roundTo(
+                          ((data.owned * data.current - data.invested) * 100) /
+                            data.invested
+                        ) < 0
+                          ? "rgb(233,0,0)"
+                          : "lightgreen",
+                    }}
+                  >
+                    {data.invested > 0
+                      ? roundTo(
+                          ((data.owned * data.current - data.invested) * 100) /
+                            data.invested
+                        )
+                      : data.owned > 0
+                      ? "∞"
+                      : "0"}
                   </Typography>
                 </div>
               </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell style={{ border: 0, padding: "10px 16px" }}>
-                <div>
-                  <Typography
-                    style={{ fontSize: "14px", color: "rgb(160,160,160)" }}
-                  >
-                    AVERAGE BUYING PRICE
-                  </Typography>
-                </div>
-                <div>
-                  <Typography>₹296.81</Typography>
-                </div>
-              </TableCell>
-              <TableCell style={{ border: 0, padding: "10px 16px" }}>
+              <TableCell
+                style={{ border: 0, padding: "10px 16px" }}
+                colSpan={2}
+                align="center"
+              >
                 <div>
                   <Typography
                     style={{ fontSize: "14px", color: "rgb(160,160,160)" }}

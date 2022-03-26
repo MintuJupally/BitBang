@@ -46,7 +46,8 @@ function App() {
             token: idToken,
           })
           .then((res) => {
-            console.log({ res, user });
+            console.log({ data: res.data, user });
+
             setUserData({
               ...res.data,
               name: user.displayName,

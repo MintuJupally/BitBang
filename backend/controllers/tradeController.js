@@ -3,16 +3,16 @@ const AppError = require("../utils/appError");
 const { db } = require("../db");
 
 exports.performTransaction = catchAsync(async (req, res, next) => {
-  const { money, coins, curr, type } = req.body;
+  const { money, coins, curr, type, t } = req.body;
 
   console.log(req.body);
 
-  if (!money || !coins || !curr || !type)
+  if (!money || !coins || !curr || !type || !t)
     return next(new AppError("Bad request", 400));
 
   await db
     .collection("transactions")
-    .add({ user: req.user.id, money, coins, curr, type, time: Date.now() });
+    .add({ user: req.user.id, money, coins, curr, type, t, time: Date.now() });
 
   console.log({
     wallet: req.user.wallet,
