@@ -379,9 +379,9 @@ const Home = ({ user }) => {
                           )}
                         </div>
                         <div style={{ textAlign: "left" }}>
-                          Day ${parseInt(el.time / 10)}
+                          Day {parseInt(el.t / 10)}
                           <br />
-                          09:29 PM
+                          Hour {el.t % 10}
                         </div>
                       </div>
                       <div style={{ display: "flex", alignItems: "center" }}>

@@ -15,18 +15,30 @@ import {
 
 import { db } from "../Auth/firebase";
 
-let userTransactions = {};
+const coins = {
+  BTC: 0,
+  ETH: 1,
+  DOGE: 2,
+  SHIB: 3,
+  SOL: 4,
+  TRX: 5,
+  XRP: 6,
+};
 
 const Admin = () => {
   const [users, setUsers] = useState(null);
   const [transactions, setTransactions] = useState(null);
+  const [userTransactions, setUserTransactions] = useState(null);
+  const [prices, setPrices] = useState(null);
 
   useEffect(() => {
     const unsubscribeUsers = onSnapshot(collection(db, "users"), (data) => {
       const list = [];
       data.docs.forEach((doc) => {
-        list.push(doc.data());
+        list.push({ id: doc.id, ...doc.data() });
       });
+
+      console.log({ list });
 
       setUsers(list);
     });
@@ -42,22 +54,42 @@ const Admin = () => {
       setTransactions(hist);
     });
 
+    const unsubscribeValues = onSnapshot(collection(db, "values"), (data) => {
+      const vals = data.docs
+        .map((el) => el.data())
+        .sort((a, b) => {
+          return a.time - b.time;
+        })
+        .map((el) => [el.time, el.val]);
+
+      if (vals.length > 0) {
+        setPrices(vals[vals.length - 1][1]);
+      } else setPrices(null);
+    });
+
     return () => {
       unsubscribeUsers();
       unsubscribeTransactions();
+      unsubscribeValues();
     };
   }, []);
 
   useEffect(() => {
     // map user transaction money with user id
-    transactions.forEach((trans) => {
-      if (!userTransactions[trans.user]) {
-        userTransactions[trans.user] = 0;
-      }
+    let userMap = {};
+    if (prices && transactions) {
+      transactions.forEach((trans) => {
+        if (!userMap[trans.user]) {
+          userMap[trans.user] = 0;
+        }
 
-      userTransactions[trans.user] += trans.amount;
-    });
-  }, [transactions]);
+        userMap[trans.user] +=
+          trans.coins * trans.type * -1 * prices[coins[trans.curr]];
+      });
+    }
+
+    setUserTransactions(userMap);
+  }, [transactions, prices]);
 
   return (
     <Container style={{ marginTop: "20px", textAlign: "center" }}>
@@ -129,42 +161,68 @@ const Admin = () => {
               >
                 Wallet
               </TableCell>
+              <TableCell
+                style={{
+                  border: 0,
+                  padding: "3px",
+                  fontSize: "18px",
+                  fontWeight: "600",
+                }}
+                align="center"
+              >
+                Portfolio
+              </TableCell>
             </TableRow>
-            {users?.map((part, index) => {
-              return (
-                <TableRow
-                  key={"user-" + index}
-                  style={{
-                    boxShadow: "0px 0px 15px 5px rgb(200,200,200,0.1)",
-                    padding: "5px",
-                  }}
-                >
-                  <TableCell
+            {users
+              ?.sort((a, b) => {
+                return (
+                  b.wallet +
+                  (userTransactions[b.id] ?? 0) -
+                  a.wallet -
+                  (userTransactions[a.id] ?? 0)
+                );
+              })
+              .map((part, index) => {
+                return (
+                  <TableRow
+                    key={"user-" + index}
                     style={{
-                      border: 0,
-                      padding: "3px",
-                      width: "50px",
-                      fontSize: "18px",
+                      boxShadow: "0px 0px 15px 5px rgb(200,200,200,0.1)",
+                      padding: "5px",
                     }}
-                    align="center"
                   >
-                    {index + 1}
-                  </TableCell>
-                  <TableCell
-                    style={{ border: 0, padding: "3px", fontSize: "18px" }}
-                    align="left"
-                  >
-                    {part.email}
-                  </TableCell>
-                  <TableCell
-                    style={{ border: 0, padding: "3px", fontSize: "18px" }}
-                    align="center"
-                  >
-                    {part.wallet}
-                  </TableCell>
-                </TableRow>
-              );
-            })}
+                    <TableCell
+                      style={{
+                        border: 0,
+                        padding: "3px",
+                        width: "50px",
+                        fontSize: "18px",
+                      }}
+                      align="center"
+                    >
+                      {index + 1}
+                    </TableCell>
+                    <TableCell
+                      style={{ border: 0, padding: "3px", fontSize: "18px" }}
+                      align="left"
+                    >
+                      {part.email}
+                    </TableCell>
+                    <TableCell
+                      style={{ border: 0, padding: "3px", fontSize: "18px" }}
+                      align="center"
+                    >
+                      {part.wallet}
+                    </TableCell>
+                    <TableCell
+                      style={{ border: 0, padding: "3px", fontSize: "18px" }}
+                      align="center"
+                    >
+                      {userTransactions[part.id] ?? 0}
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
           </TableBody>
         </Table>
       </div>

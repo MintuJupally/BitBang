@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { Container, Typography, CircularProgress } from "@mui/material";
 import NavMenu from "../Auth/Logout";
 
 const Layout = ({ user, loading }) => {
+  const navigate = useNavigate();
+
   if (loading)
     return (
       <div
@@ -45,6 +47,10 @@ const Layout = ({ user, loading }) => {
                   md: "inherit",
                 },
                 left: { xs: 16 },
+                cursor: "pointer",
+              }}
+              onClick={() => {
+                navigate("/");
               }}
             >
               BITBANG
