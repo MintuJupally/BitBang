@@ -16,6 +16,7 @@ import {
 } from "@mui/material";
 import {
   PlayCircleRounded,
+  PauseCircleRounded,
   StopCircleRounded,
   RestartAltRounded,
 } from "@mui/icons-material";
@@ -179,7 +180,20 @@ const Admin = ({ user }) => {
             backgroundColor:
               loading || status?.stop || status?.pause
                 ? "lightgrey"
-                : "rgb(230, 0, 0)",
+                : "goldenrod",
+            margin: "0px 10px",
+          }}
+          onClick={() => {
+            perform("pause");
+          }}
+        >
+          <PauseCircleRounded /> &nbsp;PAUSE
+        </Button>
+        <Button
+          disabled={loading}
+          variant="contained"
+          style={{
+            backgroundColor: loading ? "lightgrey" : "rgb(230, 0, 0)",
             margin: "0px 10px",
           }}
           onClick={() => {

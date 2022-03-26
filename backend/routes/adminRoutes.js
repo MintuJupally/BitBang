@@ -60,7 +60,7 @@ Router.post(
 );
 
 Router.post(
-  "/stop",
+  "/pause",
   catchAsync(async (req, res, next) => {
     if (timer) {
       clearInterval(timer);
@@ -73,6 +73,26 @@ Router.post(
       return res.send("Already Stopped");
     }
     status = false;
+
+    res.send("Stopped");
+  })
+);
+
+Router.post(
+  "/stop",
+  catchAsync(async (req, res, next) => {
+    status = false;
+    index = 0;
+    if (timer) {
+      clearInterval(timer);
+      timer = null;
+
+      db.collection("event")
+        .doc("start")
+        .update({ pause: true, lastUpdated: Date.now() });
+    } else {
+      return res.send("Already Stopped");
+    }
 
     res.send("Stopped");
   })
