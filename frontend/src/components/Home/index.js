@@ -1,7 +1,7 @@
 import { useState, useEffect, Fragment } from "react";
 import axios from "axios";
 
-import { collection, query, where, onSnapshot } from "firebase/firestore";
+import { collection, query, doc, where, onSnapshot } from "firebase/firestore";
 import { db } from "../Auth/firebase";
 
 import { makeStyles } from "@mui/styles";
@@ -59,7 +59,7 @@ const useStyles = makeStyles({
   },
 });
 
-let unsubscribe = null;
+let unsubscribeTransactions = null;
 
 const coins = [
   { name: "Bitcoin", img: btc, curr: "BTC" },
@@ -87,6 +87,7 @@ const Home = ({ user }) => {
   const [processing, setProcessing] = useState(false);
 
   const [currentCoin, setCurrentCoin] = useState(null);
+  const [status, setStatus] = useState(null);
 
   const handleModalClose = () => {
     setModalOpen(false);
@@ -129,7 +130,7 @@ const Home = ({ user }) => {
 
   useEffect(() => {
     const ref = collection(db, "values");
-    onSnapshot(ref, (data) => {
+    const unsubscribeValues = onSnapshot(ref, (data) => {
       const vals = data.docs
         .map((el) => el.data())
         .sort((a, b) => {
@@ -139,6 +140,15 @@ const Home = ({ user }) => {
 
       setPrices(vals);
     });
+
+    const unsubscribeEvents = onSnapshot(doc(db, "event", "start"), (data) => {
+      setStatus(data.data());
+    });
+
+    return () => {
+      unsubscribeValues();
+      unsubscribeEvents();
+    };
   }, []);
 
   useEffect(() => {
@@ -158,7 +168,10 @@ const Home = ({ user }) => {
 
   useEffect(() => {
     if (currentCoin) {
-      if (unsubscribe) unsubscribe();
+      if (unsubscribeTransactions) {
+        unsubscribeTransactions();
+        unsubscribeTransactions = null;
+      }
 
       const q = query(
         collection(db, "transactions"),
@@ -166,7 +179,7 @@ const Home = ({ user }) => {
         where("curr", "==", currentCoin?.curr)
       );
 
-      unsubscribe = onSnapshot(q, (querySnapshot) => {
+      unsubscribeTransactions = onSnapshot(q, (querySnapshot) => {
         const hist = [];
         querySnapshot.forEach((doc) => {
           hist.push(doc.data());
@@ -175,6 +188,13 @@ const Home = ({ user }) => {
         setTransactions(hist.sort((a, b) => b.time - a.time));
       });
     }
+
+    return () => {
+      if (unsubscribeTransactions) {
+        unsubscribeTransactions();
+        unsubscribeTransactions = null;
+      }
+    };
   }, [currentCoin]);
 
   let current = currentCoin?.prices?.[currentCoin?.prices?.length - 1]?.[1];
@@ -419,28 +439,36 @@ const Home = ({ user }) => {
               )}
             </div>
           </Card>
-          {user?.isRegistered && (
-            <div style={{ display: "flex", justifyContent: "space-evenly" }}>
-              <Button
-                variant="contained"
-                style={{ backgroundColor: "rgb(31, 147, 88)", width: "120px" }}
-                onClick={() => {
-                  setTradeModalOpen(-1);
-                }}
-              >
-                BUY {currentCoin?.curr}
-              </Button>
-              <Button
-                variant="contained"
-                style={{ backgroundColor: "rgb(224, 77, 91)", width: "120px" }}
-                onClick={() => {
-                  setTradeModalOpen(1);
-                }}
-              >
-                SELL {currentCoin?.curr}
-              </Button>
-            </div>
-          )}
+          {user?.isRegistered &&
+            currentCoin?.prices?.[currentCoin?.prices?.length - 1]?.[0] >= 10 &&
+            !status?.stop && (
+              <div style={{ display: "flex", justifyContent: "space-evenly" }}>
+                <Button
+                  variant="contained"
+                  style={{
+                    backgroundColor: "rgb(31, 147, 88)",
+                    width: "120px",
+                  }}
+                  onClick={() => {
+                    setTradeModalOpen(-1);
+                  }}
+                >
+                  BUY {currentCoin?.curr}
+                </Button>
+                <Button
+                  variant="contained"
+                  style={{
+                    backgroundColor: "rgb(224, 77, 91)",
+                    width: "120px",
+                  }}
+                  onClick={() => {
+                    setTradeModalOpen(1);
+                  }}
+                >
+                  SELL {currentCoin?.curr}
+                </Button>
+              </div>
+            )}
         </Grid>
       </Grid>
       <Box

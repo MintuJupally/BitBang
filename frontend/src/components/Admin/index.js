@@ -39,6 +39,7 @@ const Admin = ({ user }) => {
   const [transactions, setTransactions] = useState(null);
   const [userTransactions, setUserTransactions] = useState(null);
   const [prices, setPrices] = useState(null);
+  const [time, setTime] = useState(null);
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState(null);
 
@@ -75,7 +76,11 @@ const Admin = ({ user }) => {
 
       if (vals.length > 0) {
         setPrices(vals[vals.length - 1][1]);
-      } else setPrices(null);
+        setTime(vals[vals.length - 1][0]);
+      } else {
+        setPrices(null);
+        setTime(null);
+      }
     });
 
     const unsubscribeEvents = onSnapshot(doc(db, "event", "start"), (data) => {
@@ -136,12 +141,13 @@ const Admin = ({ user }) => {
         <Card
           style={{
             padding: "10px 20px",
+            margin: "0px 10px",
             boxShadow: "0px 0px 15px 5px rgb(200,200,200,0.3)",
           }}
         >
           <div>
             <Typography style={{ fontSize: "14px", color: "rgb(160,160,160)" }}>
-              PARTCIPANTS
+              PARTICIPANTS
             </Typography>
           </div>
           <div>
@@ -152,6 +158,26 @@ const Admin = ({ user }) => {
             ) : (
               <CircularProgress />
             )}
+          </div>
+        </Card>
+        <Card
+          style={{
+            padding: "10px 20px",
+            margin: "0px 10px",
+            boxShadow: "0px 0px 15px 5px rgb(200,200,200,0.3)",
+          }}
+        >
+          <div>
+            <Typography style={{ fontSize: "14px", color: "rgb(160,160,160)" }}>
+              {status?.stop
+                ? "STOPPED"
+                : status?.started
+                ? "RUNNING"
+                : "NOT STARTED"}
+            </Typography>
+          </div>
+          <div>
+            {status?.started && `Day ${parseInt(time / 10)} Hour ${time % 10}`}
           </div>
         </Card>
       </div>

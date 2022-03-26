@@ -5,7 +5,7 @@ const { db } = require("../db");
 exports.performTransaction = catchAsync(async (req, res, next) => {
   const { money, coins, curr, type, t } = req.body;
 
-  if (!money || !coins || !curr || !type || !t)
+  if (!money || !coins || !curr || !type || !t || t < 10)
     return next(new AppError("Bad request", 400));
 
   await db

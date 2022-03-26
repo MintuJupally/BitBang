@@ -83,13 +83,17 @@ Router.post(
   catchAsync(async (req, res, next) => {
     status = false;
     index = 0;
+
+    db.collection("event").doc("start").update({
+      started: false,
+      stop: false,
+      pause: false,
+      lastUpdated: Date.now(),
+    });
+
     if (timer) {
       clearInterval(timer);
       timer = null;
-
-      db.collection("event")
-        .doc("start")
-        .update({ pause: true, lastUpdated: Date.now() });
     } else {
       return res.send("Already Stopped");
     }
