@@ -34,6 +34,7 @@ import {
 import Graph from "./Graph";
 import InfoCard from "./InfoCard";
 import { showPrice, isDecimal, roundTo } from "../../utils";
+import { BACKEND_URL } from "../../constants";
 
 import btc from "../../assets/images/btc.svg";
 import doge from "../../assets/images/doge.svg";
@@ -99,7 +100,7 @@ const Home = ({ user }) => {
     setProcessing(true);
 
     axios
-      .post("/api/trade", {
+      .post(BACKEND_URL + "api/trade", {
         money: parseFloat(money),
         coins: parseFloat(numCoins),
         curr: currentCoin?.curr,

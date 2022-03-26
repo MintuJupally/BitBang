@@ -6,6 +6,7 @@ const AppError = require("./utils/appError");
 const catchAsync = require("./utils/catchAsync");
 const authRouter = require("./routes/authRoutes");
 const tradeRouter = require("./routes/tradeRoutes");
+const globalErrorHandler = require("./controllers/errorController");
 const data = require("./assets/data.json");
 const { db } = require("./db");
 
@@ -84,5 +85,7 @@ app.post("/api/stop", async (req, res, next) => {
 app.all("*", (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 });
+
+app.use(globalErrorHandler);
 
 module.exports = app;

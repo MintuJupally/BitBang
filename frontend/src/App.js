@@ -6,6 +6,7 @@ import { doc, onSnapshot } from "firebase/firestore";
 
 import { auth, db } from "./components/Auth/firebase";
 import setRoutes from "./routes";
+import { BACKEND_URL } from "./constants";
 import "./App.css";
 
 let unsubscribe = null;
@@ -42,7 +43,7 @@ function App() {
       ?.getIdToken()
       .then((idToken) => {
         axios
-          .post("/api/auth/login", {
+          .post(BACKEND_URL + "api/auth/login", {
             token: idToken,
           })
           .then((res) => {
