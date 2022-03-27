@@ -92,7 +92,7 @@ const InfoCard = ({ data }) => {
                     style={{
                       color:
                         data.owned * data.current - data.invested >= 0
-                          ? "lightgreen"
+                          ? "rgb(31, 147, 88)"
                           : "rgb(233,0,0)",
                     }}
                   >
@@ -118,7 +118,7 @@ const InfoCard = ({ data }) => {
                             data.invested
                         ) < 0
                           ? "rgb(233,0,0)"
-                          : "lightgreen",
+                          : "rgb(31, 147, 88)",
                     }}
                   >
                     {data.invested > 0

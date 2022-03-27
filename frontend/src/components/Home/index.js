@@ -112,11 +112,13 @@ const Home = ({ user }) => {
         console.log(res);
 
         setProcessing(false);
+        setTradeModalOpen(0);
       })
       .catch((err) => {
         console.log(err);
 
         setProcessing(false);
+        setTradeModalOpen(0);
       });
   };
 
@@ -538,7 +540,7 @@ const Home = ({ user }) => {
                       whiteSpace: "nowrap",
                     }}
                   >
-                    {showPrice(invested)}
+                    {invested >= 0 ? showPrice(invested) : showPrice(0)}
                   </Typography>
                 </div>
               </div>
@@ -676,7 +678,9 @@ const Home = ({ user }) => {
             </IconButton>
             <Typography style={{ paddingBottom: "10px" }}>
               Enter the amount you want to{" "}
-              <b>{tradeModalOpen > 0 ? "sell" : "buy"}</b>
+              <b style={{ textTransform: "uppercase" }}>
+                {tradeModalOpen > 0 ? "sell" : "buy"}
+              </b>
             </Typography>
             <div style={{ padding: "5px" }}>
               <TextField
