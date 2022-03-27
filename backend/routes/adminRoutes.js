@@ -47,7 +47,7 @@ const startUpload = () => {
       }, 1.5 * 60 * 1000);
       status = false;
     }
-  }, 5 * 1000);
+  }, 1.5 * 60 * 1000);
 };
 
 Router.use(
