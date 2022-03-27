@@ -4,43 +4,50 @@ import { Button, Box, Container, Typography } from "@mui/material";
 import Tilt from "react-parallax-tilt";
 import img from "../../assets/bitcoin.jpg";
 import google from "../../assets/images/Google.png";
+import eslogo from "../../assets/es_logo.png";
 import "./login.css";
 
 let angle = 0;
 const Login = () => {
-	const [rindex, setRindex] = useState(0);
-
-	// useEffect(() => {
-	// 	angle = (angle + 90) % 360;
-	// 	setTimeout(() => {
-	// 		console.log(angle);
-	// 		setRindex((rindex + 1) % 3);
-	// 	}, 3000);
-	// }, [rindex]);
-
 	return (
 		<div className="limiter">
 			<div className="container-login100">
+				<div className="logo">
+					<a href="https://e-summit-iitbbs.com" target="_blank">
+						<img src={eslogo} />
+					</a>
+				</div>
 				<div
 					className="wrap-login100"
-					style={{ padding: "30px", alignItems: "center" }}
+					style={{
+						padding: 60,
+						alignItems: "center",
+						justifyContent: "space-around",
+						boxShadow: "0px 0px 25px 5px rgba(0,0,0,0.5)",
+					}}
 				>
 					<div
 						className="login100-pic js-tilt"
 						data-tilt
-						style={{ padding: 60 }}
+						// style={{ padding: 60 }}
 					>
-						<Tilt scale={1.1} tiltReverse={true}>
+						<Tilt scale={1.1} tiltReverse={true} style={{ width: "200px" }}>
 							<img src={img} alt="IMG" className="bitcoing_img" />
 						</Tilt>
 					</div>
 					<form className="login100-form validate-form">
+						<Typography
+							variant="h4"
+							style={{ color: "black", marginBottom: "30px" }}
+						>
+							BitBang
+						</Typography>
 						<Button
 							variant="contained"
 							style={{
 								backgroundColor: "white",
 								color: "black",
-								fontSize: 20,
+								marginBottom: "30px",
 							}}
 							onClick={signInWithGoogle}
 						>
