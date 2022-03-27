@@ -25,6 +25,11 @@ const startUpload = () => {
       startedAt: Date.now(),
       lastUpdated: Date.now(),
     });
+  else
+    db.collection("event").doc("start").update({
+      pause: false,
+      lastUpdated: Date.now(),
+    });
 
   timer = setInterval(() => {
     if (index === data.length || !status) {
