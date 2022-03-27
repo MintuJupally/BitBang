@@ -1,0 +1,20 @@
+.rotating_text {
+	display: inline-block;
+	background: skyblue;
+	/* animation: rotating 5s linear infinite; */
+	/* transition: 0.5s;
+	transform-origin: 50% 0;
+	transform-style: preserve-3d; */
+}
+.rotate {
+	position: relative;
+}
+
+@keyframes rotating {
+	0% {
+		transform: rotateX(0deg);
+	}
+	100% {
+		transform: rotateX(360deg);
+	}
+}

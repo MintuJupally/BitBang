@@ -38,7 +38,7 @@ const setRoutes = (user, loading) => {
   return [
     {
       path: "/",
-      element: <Layout user={user} loading={loading} />,
+      // element: <Layout user={user} loading={loading} />,
       children: [
         { path: "/", element: <Login /> },
         { path: "*", element: <Login /> },
