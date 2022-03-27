@@ -62,7 +62,7 @@ Router.post(
     if (status) return res.send("Already started");
 
     status = true;
-    if (data.length < index) startUpload();
+    if (data.length > index) startUpload();
 
     res.send("Started");
   })
