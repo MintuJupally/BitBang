@@ -55,6 +55,34 @@ const startUpload = () => {
   }, 1.5 * 60 * 1000);
 };
 
+Router.get(
+  "/doit",
+  catchAsync(async (req, res, next) => {
+    index = 22;
+
+    console.log("hi");
+
+    timer = setInterval(() => {
+      console.log({ index });
+      if (index === data.length) {
+        db.collection("event").doc("start").update({
+          stop: true,
+          startedAt: Date.now(),
+          lastUpdated: Date.now(),
+        });
+
+        clearInterval(timer);
+        return;
+      }
+      console.log({ time: index, val: data[index] });
+
+      db.collection("values").add({ time: index, val: data[index++] });
+    }, 1.5 * 60 * 1000);
+
+    res.send("OK");
+  })
+);
+
 Router.use(
   authController.verifyToken,
   authController.protect,
@@ -116,7 +144,7 @@ Router.post(
   })
 );
 
-Router.get(
+Router.post(
   "/refresh",
   catchAsync(async (req, res, next) => {
     await getAllEmails();
